@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Backpack.cs" />
+    <Compile Include="AbstractBackpack.cs" />
     <Compile Include="ExhausiveBackpack.cs" />
     <Compile Include="MethodName.cs" />
     <Compile Include="MethodFriendlyName.cs" />
