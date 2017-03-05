@@ -9,8 +9,8 @@ namespace Backpack
     /// <summary>
     /// Задача о рюкзаке. Метод полного перебора.
     /// </summary>
-    /// <seealso cref="Backpack.Backpack" />
-    public class ExhausiveSearchBackpack: Backpack
+    /// <seealso cref="AbstractBackpack.AbstractBackpack" />
+    public class ExhausiveSearchBackpack: AbstractBackpack
     {
         /// <summary>
         /// Получает тип метода, использующегося для решения задачи.
@@ -22,6 +22,7 @@ namespace Backpack
         protected bool[] result;
         protected Item[] items;
         protected uint[] resultUnl;
+        protected double maxCost;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="ExhausiveSearchBackpack"/>.
@@ -31,7 +32,6 @@ namespace Backpack
         {
 
         }
-
 
         /// <summary>
         /// Решает задачу о рюкзаке 0-1.
@@ -44,42 +44,54 @@ namespace Backpack
         public override bool[] SolveZeroOne(Item[] items)
         {
             result = new bool[items.Length];
+            bool[] testVector = new bool[items.Length];
+            maxCost = 0;
             this.items = items;
-            SolveZeroOneRec();
+            SolveZeroOneRec(testVector);
             return result;
         }
+        /// <summary>
+        /// Решает задачу о неограниченном рюкзаке.
+        /// </summary>
+        /// <param name="items">Предметы.</param>
+        /// <returns>
+        /// Возвращает массив, каждый элемент которого показывает,
+        /// сколько соответствующих предметов содержится в рюкзаке.
+        /// </returns>
         public override uint[] SolveUnlimited(Item[] items)
         {
             resultUnl = new uint[items.Length];
+            uint[] testVector = new uint[items.Length];
             this.items = items;
+            SolveUnlimitedRec(testVector);
             return resultUnl;
         }
         /// <summary>
         /// Решает задачу 0-1 рекурсивно перебирая все варианты.
         /// </summary>
-        /// <param name="i">Номер рассматриваемого предмета.</param>
-        /// <param name="w">Вес рюкзака к данному моменту.</param>
-        /// <returns>Возвращает итоговый вес рюкзака.</returns>
-        private double SolveZeroOneRec(int i = 0, double w = 0)
+        /// <param name="vector">Текущий вариант решения.</param>
+        /// <param name="i">Номер проверяемого предмета.</param>
+        private void SolveZeroOneRec(bool[] vector, int i = 0)
         {
-            if (i >= result.Length) return w; //выход из рекурсии
-            double includeResult = SolveZeroOneRec(i + 1, w + items[i].Weight);
-            double excludeResult = SolveZeroOneRec(i + 1, w);
-            //сначала вычисляются возможные альтернативы, затем происходит разбор полётов
-            //если наборот, то метод ветвей и границ
-            if (includeResult < 0 && excludeResult < 0) //оба решения плохи
-                return -1;
-            if(includeResult > excludeResult) //включить предмет лучше
+            if (i == vector.Length) //надо принять решение
             {
-                if(includeResult <= maxWeight) //не перебрали?
+                if (maxWeight >= TotalWeight(items, vector))
                 {
-                    result[i] = true;
-                    return includeResult;
+                    double cost = TotalCost(items, vector);
+                    if (cost > maxCost)
+                    {
+                        maxCost = cost;
+                        vector.CopyTo(result, 0);
+                    }
                 }
             }
-            if (excludeResult <= maxWeight) //если не включать предмет, то перебираем?
-                return excludeResult;
-            return -1; //перебрали в обоих случаях
+            else
+            {
+                vector[i] = true;
+                SolveZeroOneRec(vector, i + 1);
+                vector[i] = false;
+                SolveZeroOneRec(vector, i + 1);
+            }
         }
         /// <summary>
         /// Решает неограниченную задачу рекурсивно перебирая все варианты.
@@ -87,26 +99,35 @@ namespace Backpack
         /// <param name="i">Номер рассматриваемого предмета.</param>
         /// <param name="w">Вес рюкзака к данному моменту.</param>
         /// <returns>Возвращает итоговый вес рюкзака.</returns>
-        private double SolveUnlimitedRec(int i = 0, double w = 0)
+        private void SolveUnlimitedRec(uint[] vector, int i = 0)
         {
-            if (i >= resultUnl.Length) return w; //выход из рекурсии
-            double enoughResult = SolveUnlimitedRec(i + 1, w); //достаточно таких предметов
-            double oneMoreResult = SolveUnlimitedRec(i, w + items[i].Cost); //положим ещё один
-            if (enoughResult < 0 && oneMoreResult < 0) //оба решения плохи?
-                return -1;
-            //если положить ещё, то получаем больше
-            if(oneMoreResult > 0 && oneMoreResult > enoughResult) 
+            if (i == vector.Length) //надо принять решение
             {
-                if (oneMoreResult <= maxWeight) //и вес меньше максимального
+                if (maxWeight >= TotalWeight(items, vector))
                 {
-                    resultUnl[i]++;
-                    return oneMoreResult;
+                    double cost = TotalCost(items, vector);
+                    if (cost > maxCost)
+                    {
+                        maxCost = cost;
+                        vector.CopyTo(resultUnl, 0);
+                    }
                 }
             }
-            //если не класть, то получаем больше
-            if(enoughResult > 0 && enoughResult <= maxWeight) 
-                return enoughResult;
-            return -1; //оба решения - перебор
+            else
+            {
+                SolveUnlimitedRec(vector, i + 1);
+                uint max = (uint)(maxWeight / items[i].Weight);
+                //перебор надо ограничить, при этом не стать методов ветвей и границ
+                //будем перебирать, пока суммарная стоимость предметов с заданным индексом
+                //не привысит максимум
+                for (uint j = 1; j <= max; j++)
+                {
+                    vector[i]++;
+                    SolveUnlimitedRec(vector, i + 1);
+                }
+                vector[i] = 0;
+            }
         }
     }
 }
+

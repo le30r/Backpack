@@ -10,7 +10,7 @@ namespace Backpack
     /// Задача о рюкзаке.
     /// <see cref="https://ru.wikipedia.org/wiki/%D0%97%D0%B0%D0%B4%D0%B0%D1%87%D0%B0_%D0%BE_%D1%80%D0%B0%D0%BD%D1%86%D0%B5"/>
     /// </summary>
-    public abstract class Backpack
+    public abstract class AbstractBackpack
     {
         protected double maxWeight;
 
@@ -40,10 +40,10 @@ namespace Backpack
         }
 
         /// <summary>
-        /// Инициализирует новый экземпляр класса <see cref="Backpack"/>.
+        /// Инициализирует новый экземпляр класса <see cref="AbstractBackpack"/>.
         /// </summary>
         /// <param name="maxCost">Максимальный вес.</param>
-        public Backpack(double maxWeight)
+        public AbstractBackpack(double maxWeight)
         {
             this.MaxWeight = maxWeight;
         }
@@ -62,7 +62,7 @@ namespace Backpack
         /// <param name="inBackpack">Массив, каждый элемент которого показывает, 
         /// содержится ли соответствющий предмет в рюкзаке.</param>
         /// <returns>Возвращает стоимость предметов в рюкзаке.</returns>
-        public double CalculateTotalCost(Item[] items, bool[] inBackpack)
+        public double TotalCost(Item[] items, bool[] inBackpack)
         {
             double result = 0;
             for(int i = 0; i < items.Length; i++)
@@ -79,7 +79,7 @@ namespace Backpack
         /// <param name="inBackpack">Массив, каждый элемент которого показывает, 
         /// сколько соответствующих предметов содержится в рюкзаке.</param>
         /// <returns>Возвращает стоимость предметов в рюкзаке.</returns>
-        public double CalculateTotalCost(Item[] items, uint[] inBackpack)
+        public double TotalCost(Item[] items, uint[] inBackpack)
         {
             double result = 0;
             for (int i = 0; i < items.Length; i++)
@@ -93,6 +93,23 @@ namespace Backpack
         /// <returns>Возвращает массив, каждый элемент которого показывает, 
         /// сколько соответствующих предметов содержится в рюкзаке.</returns>
         public abstract uint[] SolveUnlimited(Item[] items);
+        public double TotalWeight(Item[] items, bool[] inBackpack)
+        {
+            double result = 0;
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (inBackpack[i])
+                    result += items[i].Weight;
+            }
+            return result;
+        }
+        public double TotalWeight(Item[] items, uint[] inBackpack)
+        {
+            double result = 0;
+            for (int i = 0; i < items.Length; i++)
+                result += inBackpack[i] * items[i].Weight;
+            return result;
+        }
     }
 
 
