@@ -62,6 +62,7 @@ namespace Backpack
         {
             resultUnl = new uint[items.Length];
             uint[] testVector = new uint[items.Length];
+            maxCost = 0;
             this.items = items;
             SolveUnlimitedRec(testVector);
             return resultUnl;
@@ -71,7 +72,7 @@ namespace Backpack
         /// </summary>
         /// <param name="vector">Текущий вариант решения.</param>
         /// <param name="i">Номер проверяемого предмета.</param>
-        private void SolveZeroOneRec(bool[] vector, int i = 0)
+        private void SolveZeroOneRec(bool[] vector, int i = 0, double w = 0)
         {
             if (i == vector.Length) //надо принять решение
             {
@@ -87,10 +88,14 @@ namespace Backpack
             }
             else
             {
-                vector[i] = true;
-                SolveZeroOneRec(vector, i + 1);
+                double inclWeight = w + items[i].Weight;
+                if (inclWeight <= maxWeight) //если не переберём, то пробуем включить элемент
+                {
+                    vector[i] = true;
+                    SolveZeroOneRec(vector, i + 1);
+                }
                 vector[i] = false;
-                SolveZeroOneRec(vector, i + 1);
+                SolveZeroOneRec(vector, i + 1, w);
             }
         }
         /// <summary>
@@ -99,7 +104,7 @@ namespace Backpack
         /// <param name="i">Номер рассматриваемого предмета.</param>
         /// <param name="w">Вес рюкзака к данному моменту.</param>
         /// <returns>Возвращает итоговый вес рюкзака.</returns>
-        private void SolveUnlimitedRec(uint[] vector, int i = 0)
+        private void SolveUnlimitedRec(uint[] vector, int i = 0, double w = 0)
         {
             if (i == vector.Length) //надо принять решение
             {
@@ -115,15 +120,13 @@ namespace Backpack
             }
             else
             {
-                SolveUnlimitedRec(vector, i + 1);
-                uint max = (uint)(maxWeight / items[i].Weight);
-                //перебор надо ограничить, при этом не стать методов ветвей и границ
-                //будем перебирать, пока суммарная стоимость предметов с заданным индексом
-                //не привысит максимум
-                for (uint j = 1; j <= max; j++)
+                SolveUnlimitedRec(vector, i + 1, w);
+                double oneMoreW = w + items[i].Weight;
+                while(oneMoreW <= maxWeight)
                 {
                     vector[i]++;
-                    SolveUnlimitedRec(vector, i + 1);
+                    SolveUnlimitedRec(vector, i, oneMoreW);
+                    oneMoreW += items[i].Weight;
                 }
                 vector[i] = 0;
             }
