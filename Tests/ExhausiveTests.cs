@@ -5,10 +5,10 @@ using Backpack;
 namespace Tests
 {
     [TestClass]
-    public class BackpackTests
+    public class ExhausiveTests
     {
         [TestMethod]
-        public void TestExhausiveZeroOneCorrectness()
+        public void TestZeroOneCorrectness()
         {
             var task = GetPredictableTask();
             AbstractBackpack b = new ExhausiveSearchBackpack(task.Item2);
@@ -17,7 +17,7 @@ namespace Tests
             Assert.IsTrue(b.TotalWeight(task.Item1, result) <= task.Item2);
         }
         [TestMethod]
-        public void TestExhausiveUnlimitedCorrectness()
+        public void TestUnlimitedCorrectness()
         {
             var task = GetPredictableTask();
             AbstractBackpack b = new ExhausiveSearchBackpack(task.Item2);
