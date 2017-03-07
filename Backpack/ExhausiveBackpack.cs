@@ -19,6 +19,7 @@ namespace Backpack
         {
             get { return MethodType.ExhausiveSearchRec; }
         }
+
         protected bool[] result;
         protected Item[] items;
         protected uint[] resultUnl;

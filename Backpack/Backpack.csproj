@@ -40,10 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractBackpack.cs" />
+    <Compile Include="BranchAndBoundBackpack.cs" />
     <Compile Include="ExhausiveBackpack.cs" />
-    <Compile Include="MethodName.cs" />
+    <Compile Include="MethodType.cs" />
     <Compile Include="MethodFriendlyName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskGenerator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

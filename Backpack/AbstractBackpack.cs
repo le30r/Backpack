@@ -8,7 +8,7 @@ namespace Backpack
 {
     /// <summary>
     /// Задача о рюкзаке.
-    /// <see cref="https://ru.wikipedia.org/wiki/%D0%97%D0%B0%D0%B4%D0%B0%D1%87%D0%B0_%D0%BE_%D1%80%D0%B0%D0%BD%D1%86%D0%B5"/>
+    /// <see cref="https://ru.wikipedia.org/wiki/Задача_о_рюкзаке"/>
     /// </summary>
     public abstract class AbstractBackpack
     {
@@ -93,6 +93,13 @@ namespace Backpack
         /// <returns>Возвращает массив, каждый элемент которого показывает, 
         /// сколько соответствующих предметов содержится в рюкзаке.</returns>
         public abstract uint[] SolveUnlimited(Item[] items);
+        /// <summary>
+        /// Вычисляет общий вес предметов.
+        /// </summary>
+        /// <param name="items">Предметы.</param>
+        /// <param name="inBackpack">Массив, каждый элемент которого показывает, 
+        /// содержится ли соответствющий предмет в рюкзаке.</param>
+        /// <returns>Возвращает общий вес предметов в рюкзаке.</returns>
         public double TotalWeight(Item[] items, bool[] inBackpack)
         {
             double result = 0;
@@ -103,6 +110,13 @@ namespace Backpack
             }
             return result;
         }
+        /// <summary>
+        /// Вычисляет общий вес предметов.
+        /// </summary>
+        /// <param name="items">Предметы.</param>
+        /// <param name="inBackpack">Массив, каждый элемент которого показывает, 
+        /// сколько соответствующих предметов содержится в рюкзаке.</param>
+        /// <returns>Возвращает общий вес предметов в рюкзаке.</returns>
         public double TotalWeight(Item[] items, uint[] inBackpack)
         {
             double result = 0;
@@ -111,7 +125,6 @@ namespace Backpack
             return result;
         }
     }
-
 
     /// <summary>
     /// Предмет рюкзака.

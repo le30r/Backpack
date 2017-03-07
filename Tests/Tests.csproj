@@ -50,8 +50,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="BackpackTests.cs" />
+    <Compile Include="ExhausiveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BranchAndBoundTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Backpack\Backpack.csproj">

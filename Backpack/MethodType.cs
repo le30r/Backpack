@@ -15,6 +15,8 @@ namespace Backpack
         /// Рекурсивный полный перебор.
         /// </summary>
         [MethodFriendlyName("Полный перебор")]
-        ExhausiveSearchRec
+        ExhausiveSearchRec,
+        [MethodFriendlyName("Метод ветвей и границ")]
+        BranchAndBound
     }
 }
