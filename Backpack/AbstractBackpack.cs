@@ -24,7 +24,7 @@ namespace Backpack
             {
                 return maxWeight;
             }
-            private set
+            set
             {
                 if (value <= 0)
                     throw new ArgumentException("Значение должно быть больше 0.", "value");

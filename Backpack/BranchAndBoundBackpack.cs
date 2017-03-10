@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Backpack
 {
     /// <summary>
-    /// Решение методом ветвей и границ.
+    /// Решение методом ветвей и границ. Работает хорошо, когда веса предметов сильно различаются.
     /// </summary>
     /// <seealso cref="Backpack.AbstractBackpack" />
     public class BranchAndBoundBackpack: AbstractBackpack
