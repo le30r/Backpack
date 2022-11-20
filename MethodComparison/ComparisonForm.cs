@@ -23,7 +23,7 @@ namespace MethodComparison
         protected List<Color> colors; 
         protected AbortableBackgroundWorker bw;
         protected int minTaskSize = 10;
-        protected int maxTaskSize = 25;
+        protected int maxTaskSize = 80;
 
         public ComparisonForm()
         {
